@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>体验室系统 - 素材测试功能上新</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #818cf8;
+            --primary-bg: #eef2ff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --bg: #ffffff;
+            --bg-subtle: #f8fafc;
+            --bg-warm: #fafaf9;
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.1);
+            --radius: 16px;
+            --radius-lg: 24px;
+            --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-warm);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ===== 导航栏 ===== */
+        .nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            padding: 16px 60px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid var(--border-light);
+            transition: var(--transition);
+        }
+        .nav.scrolled {
+            padding: 12px 60px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .logo {
+            font-size: 20px; font-weight: 700;
+            background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        .nav-links { display: flex; gap: 36px; }
+        .nav-links a {
+            color: var(--text-secondary); text-decoration: none;
+            font-size: 14px; font-weight: 500;
+            transition: var(--transition); position: relative;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px;
+            background: var(--primary); transition: width 0.3s ease;
+        }
+        .nav-links a:hover { color: var(--primary); }
+        .nav-links a:hover::after { width: 100%; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+
+        /* ===== Hero ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 140px 0 80px;
+            background: linear-gradient(180deg, var(--bg) 0%, var(--bg-subtle) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 装饰背景 */
+        .hero::before {
+            content: '';
+            position: absolute; top: -200px; right: -200px;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(79,70,229,0.07) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .hero::after {
+            content: '';
+            position: absolute; bottom: -150px; left: -150px;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(124,58,237,0.05) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 7px 18px; background: var(--primary-bg); border: 1px solid rgba(79,70,229,0.15);
+            border-radius: 50px; font-size: 13px; font-weight: 500;
+            color: var(--primary); margin-bottom: 28px;
+            animation: fadeInUp 0.7s ease forwards;
+        }
+        .hero h1 {
+            font-size: 56px; font-weight: 700; line-height: 1.15;
+            margin-bottom: 22px; letter-spacing: -0.02em;
+            animation: fadeInUp 0.7s ease 0.15s forwards; opacity: 0;
+        }
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary) 0%, #ec4899 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .hero p {
+            font-size: 18px; color: var(--text-secondary);
+            max-width: 550px; margin-bottom: 40px;
+            animation: fadeInUp 0.7s ease 0.3s forwards; opacity: 0;
+        }
+        .hero-cta {
+            display: flex; gap: 14px;
+            animation: fadeInUp 0.7s ease 0.45s forwards; opacity: 0;
+        }
+
+        .btn-primary {
+            padding: 14px 32px; background: var(--primary); border: none;
+            border-radius: 12px; color: #fff; font-size: 15px; font-weight: 600;
+            cursor: pointer; transition: var(--transition); text-decoration: none;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px); box-shadow: 0 12px 30px rgba(79,70,229,0.3);
+            background: #4338ca;
+        }
+        .btn-secondary {
+            padding: 14px 32px; background: var(--bg); border: 1px solid var(--border);
+            border-radius: 12px; color: var(--text-primary); font-size: 15px; font-weight: 500;
+            cursor: pointer; transition: var(--transition); text-decoration: none;
+        }
+        .btn-secondary:hover { background: var(--bg-subtle); border-color: var(--primary-light); }
+
+        .scroll-indicator {
+            position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+            animation: bounce 2.5s infinite;
+        }
+        @keyframes bounce { 0%,100%{transform:translateX(-50%)translateY(0)} 50%{transform:translateX(-50%)translateY(10px)} }
+        .scroll-indicator svg { width: 24px; height: 24px; stroke: var(--text-muted); }
+
+        @keyframes fadeInUp {
+            from { opacity:0; transform: translateY(25px); }
+            to { opacity:1; transform: translateY(0); }
+        }
+
+        /* ===== Section ===== */
+        .section { padding: 90px 0; }
+        .section-header { text-align: center; margin-bottom: 56px; }
+        .section-label {
+            display: inline-block; padding: 5px 14px; background: var(--primary-bg);
+            border-radius: 20px; font-size: 13px; font-weight: 500;
+            color: var(--primary); margin-bottom: 14px;
+        }
+        .section-title { font-size: 38px; font-weight: 700; margin-bottom: 14px; letter-spacing: -0.01em; }
+        .section-desc { font-size: 17px; color: var(--text-secondary); max-width: 600px; margin: 0 auto; }
+
+        /* ===== 功能卡片 ===== */
+        .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .feature-card {
+            background: var(--bg); border: 1px solid var(--border);
+            border-radius: var(--radius-lg); padding: 34px 28px;
+            transition: var(--transition); position: relative; overflow: hidden;
+            display: flex; flex-direction: column;
+        }
+        .feature-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, var(--primary), #a78bfa); opacity: 0;
+            transition: opacity 0.35s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-6px); box-shadow: var(--shadow-lg);
+            border-color: rgba(79,70,229,0.2);
+        }
+        .feature-card:hover::before { opacity: 1; }
+
+        .feature-icon {
+            width: 54px; height: 54px; background: var(--primary-bg);
+            border-radius: 14px; display: flex; align-items: center; justify-content: center;
+            font-size: 26px; margin-bottom: 20px;
+        }
+        .feature-number {
+            position: absolute; top: 18px; right: 22px;
+            font-size: 13px; font-weight: 700; color: var(--text-muted);
+        }
+        .feature-card h3 { font-size: 19px; font-weight: 600; margin-bottom: 10px; color: var(--text-primary); }
+        .feature-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.65; margin-bottom: 18px; }
+        .feature-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+        .feature-card > .video-section { margin-top: auto; }
+        .feature-tag {
+            padding: 4px 11px; background: var(--primary-bg);
+            border-radius: 6px; font-size: 12px; font-weight: 500; color: var(--primary);
+        }
+
+        .video-section {
+            margin-top: 14px; border-radius: 14px; overflow: hidden;
+            background: var(--bg-subtle); aspect-ratio: 16/9;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; position: relative; border: 1.5px solid var(--border);
+            transition: var(--transition);
+        }
+        .video-section:hover { border-color: var(--primary-light); box-shadow: 0 0 24px rgba(79,70,229,0.12); }
+        .video-section img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+        .video-overlay {
+            position: absolute; inset: 0; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 8px;
+            background: rgba(0,0,0,0.35); transition: var(--transition);
+        }
+        .video-section:hover .video-overlay { background: rgba(0,0,0,0.5); }
+        .play-btn {
+            width: 52px; height: 52px; background: rgba(255,255,255,0.85);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+            opacity: 0.6; transition: all .25s ease;
+        }
+        .video-section:hover .play-btn { opacity: 1; background: rgba(255,255,255,0.95); }
+        .play-btn svg { width: 22px; height: 22px; color: #1a1a2e; margin-left: 3px; }
+        .video-overlay span { font-size: 13px; color: #fff; font-weight: 500; opacity: 0.55; transition: opacity .25s ease; }
+        .video-section:hover .video-overlay span { opacity: 1; }
+        .video-placeholder { display: none; }
+
+        /* ===== 使用指南 ===== */
+        .guide-section {
+            background: var(--bg); border: 1px solid var(--border);
+            border-radius: var(--radius-lg); padding: 52px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* ===== 指南内导航 Tab ===== */
+        .guide-tabs {
+            display: flex; gap: 12px; justify-content: center; margin-bottom: 40px;
+        }
+        .guide-tab-btn {
+            padding: 10px 24px; border: 1.5px solid var(--border);
+            border-radius: 50px; background: var(--bg); color: var(--text-secondary);
+            font-size: 14px; font-weight: 600; cursor: pointer;
+            transition: var(--transition); display: flex; align-items: center; gap: 6px;
+        }
+        .guide-tab-btn:hover { border-color: var(--primary-light); color: var(--primary); background: var(--primary-bg); }
+        .guide-tab-btn.active {
+            background: var(--primary); color: #fff; border-color: var(--primary);
+            box-shadow: 0 6px 20px rgba(79,70,229,0.3);
+        }
+
+        /* ===== 指南部分卡片独立分开 ===== */
+        .guide-part {
+            background: var(--bg); border: 1px solid var(--border);
+            border-radius: var(--radius-lg); padding: 36px 40px;
+            margin-bottom: 24px; box-shadow: var(--shadow-sm);
+        }
+        .guide-part:last-child { margin-bottom: 0; }
+
+        .guide-part-title {
+            font-size: 22px; font-weight: 700; color: var(--text-primary);
+            margin: 0 0 8px 0;
+        }
+        .guide-part-desc {
+            color: var(--text-secondary); margin: 0 0 28px 0; font-size: 15px;
+        }
+
+        /* ===== 情绪测试纵向导航 ===== */
+        .emotion-steps-wrapper {
+            display: flex; gap: 32px; margin-top: 24px;
+        }
+        .side-nav {
+            width: 180px; flex-shrink: 0;
+            position: sticky; top: 24px; height: fit-content;
+        }
+        .side-nav-title {
+            font-size: 12px; font-weight: 600; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 0.8px;
+            margin-bottom: 12px; padding-left: 4px;
+        }
+        .side-nav-item {
+            display: flex; align-items: center; gap: 8px;
+            padding: 8px 10px; border-radius: 8px;
+            color: var(--text-secondary); font-size: 13px; font-weight: 400;
+            cursor: pointer; transition: all .25s ease;
+            text-decoration: none; margin-bottom: 2px;
+            white-space: nowrap;
+        }
+        .side-nav-item:hover { background: var(--bg-subtle); color: var(--text-primary); }
+        .side-nav-item.active { background: var(--primary); color: #fff; }
+        .side-nav-item .nav-num {
+            width: 24px; height: 24px; border-radius: 50%;
+            background: var(--border); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; font-weight: 700; flex-shrink: 0;
+        }
+        .side-nav-item.active .nav-num { background: rgba(255,255,255,0.25); }
+        .emotion-steps-content { flex: 1; }
+
+        /* 阶段标题（无序号） */
+        .phase-title {
+            font-size: 18px; font-weight: 700; color: var(--text-primary);
+            margin: 0 0 20px 0; padding-bottom: 12px;
+            border-bottom: 2px solid var(--primary);
+            display: inline-block;
+        }
+
+        /* ===== 图片预览弹窗 ===== */
+        .img-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.92); z-index: 9999;
+            align-items: center; justify-content: center;
+        }
+        .img-modal.active { display: flex; }
+        .img-modal img {
+            max-width: 92vw; max-height: 92vh; object-fit: contain;
+            border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .img-modal-close {
+            position: absolute; top: 20px; right: 24px;
+            width: 44px; height: 44px; border-radius: 50%;
+            background: rgba(255,255,255,0.15); color: #fff; border: none;
+            font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: background .2s;
+        }
+        .img-modal-close:hover { background: rgba(255,255,255,0.3); }
+
+        /* 截图可点击 */
+        .screenshot { cursor: zoom-in; transition: transform .2s ease, box-shadow .2s ease; }
+        .screenshot:hover { transform: scale(1.02); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+        .screenshot img { border-radius: 10px; }
+
+        .tabs {
+            display: flex; gap: 12px; margin-bottom: 44px;
+            background: var(--bg-subtle); padding: 6px; border-radius: 14px;
+            width: 100%;
+        }
+        .tab-btn {
+            padding: 14px 0; background: transparent; border: none;
+            border-radius: 10px; color: var(--text-secondary);
+            font-size: 15px; font-weight: 600; cursor: pointer; transition: var(--transition);
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            flex: 1;
+        }
+        .tab-btn.active { background: var(--primary); color: #fff; box-shadow: 0 4px 14px rgba(79,70,229,0.3); }
+        .tab-btn:hover:not(.active) { color: var(--primary); }
+        .tab-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+        .tab-content { display: none; animation: fadeUp 0.45s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+        /* 流程概览 */
+        .flow-overview {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+            margin-bottom: 48px; padding: 32px; background: var(--bg-subtle);
+            border-radius: var(--radius); border: 1px solid var(--border-light);
+        }
+        .flow-step {
+            text-align: center; padding: 24px 16px;
+        }
+        .flow-step-num {
+            width: 44px; height: 44px; background: var(--primary); color: #fff;
+            border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+            font-size: 17px; font-weight: 700; margin-bottom: 14px;
+        }
+        .flow-step-label { font-size: 14px; font-weight: 600; color: var(--primary); margin-bottom: 6px; }
+        .flow-step-text { font-size: 13px; color: var(--text-secondary); line-height: 1.55; }
+
+        /* 步骤卡片 */
+        .step-block { margin-bottom: 36px; }
+        .step-header {
+            display: flex; align-items: center; gap: 14px; margin-bottom: 14px;
+        }
+        .step-num {
+            min-width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary), #7c3aed);
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            font-size: 15px; font-weight: 700; color: #fff;
+        }
+        .step-name { font-size: 17px; font-weight: 600; }
+        .step-body {
+            font-size: 14px; color: var(--text-secondary); line-height: 1.75;
+            padding-left: 50px;
+        }
+        .step-note {
+            margin-top: 10px; padding: 12px 16px; background: #fefce8;
+            border-left: 3px solid #eab308; border-radius: 0 10px 10px 0;
+            font-size: 13px; color: #854d0e; line-height: 1.6;
+        }
+        .step-tip {
+            margin-top: 10px; padding: 12px 16px; background: var(--primary-bg);
+            border-left: 3px solid var(--primary); border-radius: 0 10px 10px 0;
+            font-size: 13px; color: #3730a3; line-height: 1.6;
+        }
+        .step-highlight {
+            margin-top: 10px; padding: 12px 16px; background: #f0fdf4;
+            border-left: 3px solid #22c55e; border-radius: 0 10px 10px 0;
+            font-size: 13px; color: #166534; line-height: 1.6;
+        }
+
+        /* 截图 */
+        .screenshots { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;
+            margin-top: 14px; padding-left: 50px; align-items: start;
+        }
+        .screenshot {
+            border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+            transition: var(--transition); background: #fff;
+        }
+        .screenshot img { width: 100%; display: block; object-fit: contain; }
+        .screenshot:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+        .screenshot-single { max-width: 480px; }
+
+        /* 三图并排缩小样式 */
+        .screenshots-row3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 10px; padding-left: 50px; }
+        .screenshots-row3 .screenshot img { width: 100%; height: auto; }
+
+        /* 子列表 */
+        .sub-list { margin-top: 10px; padding-left: 20px; }
+        .sub-item { font-size: 14px; color: var(--text-secondary); margin-bottom: 6px; line-height: 1.6; }
+
+        /* 阶段标题 */
+        .phase-title {
+            font-size: 18px; font-weight: 600; color: var(--primary);
+            margin: 36px 0 20px; padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-bg);
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        /* 对比表格 */
+        .comparison-table {
+            width: 100%; border-collapse: collapse; margin-top: 32px;
+            background: var(--bg-subtle); border-radius: var(--radius); overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 14px 20px; text-align: left; border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+        .comparison-table th { background: var(--primary-bg); font-weight: 600; color: var(--primary); }
+        .comparison-table td { color: var(--text-secondary); }
+        .comparison-table tr:last-child td { border-bottom: none; }
+        .comparison-table tr:hover td { background: var(--bg); }
+        .check-icon { color: #22c55e; font-weight: 700; }
+        .cross-icon { color: #ef4444; font-weight: 700; }
+
+        /* 联系区域 */
+        .contact-section {
+            background: linear-gradient(135deg, var(--primary-bg) 0%, #f5f3ff 100%);
+            border: 1px solid rgba(79,70,229,0.15);
+            border-radius: var(--radius-lg); padding: 44px; text-align: center;
+            margin-top: 64px;
+        }
+        .contact-section h3 { font-size: 24px; margin-bottom: 8px; color: var(--text-primary); }
+        .contact-section > p { color: var(--text-secondary); margin-bottom: 28px; }
+        .contact-cards { display: flex; justify-content: center; gap: 28px; }
+        .contact-card {
+            background: var(--bg); border-radius: 14px; padding: 22px 36px;
+            display: flex; flex-direction: column; gap: 4px;
+            box-shadow: var(--shadow-sm);
+        }
+        .contact-card-label { font-size: 12px; color: var(--text-muted); }
+        .contact-card-value { font-size: 17px; font-weight: 600; color: var(--primary); }
+
+        .footer { text-align: center; padding: 52px 0; color: var(--text-muted); font-size: 13px; }
+
+        /* 滚动动画 */
+        .reveal { opacity: 0; transform: translateY(32px); transition: all 0.7s cubic-bezier(0.4,0,0.2,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* 视频弹窗 */
+        .video-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15,23,42,0.92); z-index: 2000;
+            align-items: center; justify-content: center;
+        }
+        .video-modal.active { display: flex; }
+        .video-modal video {
+            max-width: 90%; max-height: 82vh; border-radius: 12px;
+        }
+        .video-modal-close {
+            position: absolute; top: 24px; right: 28px;
+            width: 40px; height: 40px; background: rgba(255,255,255,0.15);
+            border: none; border-radius: 50%; color: #fff; font-size: 22px;
+            cursor: pointer; transition: all 0.3s ease;
+        }
+        .video-modal-close:hover { background: rgba(255,255,255,0.3); }
+
+        /* 响应式 */
+        @media (max-width: 1024px) {
+            .features-grid, .steps-container, .flow-overview { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .nav { padding: 14px 24px; } .nav-links { display: none; }
+            .hero h1 { font-size: 36px; } .hero p { font-size: 16px; }
+            .features-grid, .steps-container, .flow-overview, .screenshots { grid-template-columns: 1fr; }
+            .guide-section { padding: 28px; }
+            .contact-cards { flex-direction: column; align-items: center; }
+            .section-title { font-size: 28px; }
+            .step-body, .screenshots { padding-left: 0; }
+            .guide-tabs { flex-wrap: wrap; gap: 8px; }
+            .guide-tab-btn { font-size: 13px; padding: 8px 16px; }
+            .guide-part { padding: 24px 20px; }
+            .emotion-steps-wrapper { flex-direction: column; gap: 16px; }
+            .side-nav { width: 100%; position: static; display: flex; flex-wrap: wrap; gap: 6px; }
+            .side-nav-title { display: none; }
+            .side-nav-item { padding: 8px 12px; font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- 导航 -->
+<nav class="nav" id="navbar">
+    <div class="logo">MUR体验室功能发布</div>
+    <div class="nav-links">
+        <a href="#features">功能更新</a>
+        <a href="#guide">使用指南</a>
+        <a href="#contact">联系我们</a>
+    </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-badge">&#x2728; 全新版本发布</div>
+        <h1>素材测试 <span>功能上新</span></h1>
+        <p>更高效的标签管理、更优的素材体验、更灵活的测评流程<br>全面提升用户体验研究效率</p>
+        <div class="hero-cta">
+            <a href="#features" class="btn-primary">了解新功能</a>
+            <a href="#guide" class="btn-secondary">查看使用指南</a>
+        </div>
+    </div>
+    <div class="scroll-indicator">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+    </div>
+</section>
+
+<!-- 功能更新 -->
+<section class="section" id="features">
+    <div class="container">
+        <div class="section-header reveal">
+            <div class="section-label">What's New</div>
+            <h2 class="section-title">版本功能上新</h2>
+            <p class="section-desc">三大核心能力升级，让素材测试更高效、更灵活</p>
+        </div>
+
+        <div class="features-grid">
+            <!-- 01 标签管理 -->
+            <div class="feature-card reveal">
+                <span class="feature-number">01</span>
+                <div class="feature-icon">&#x1F3F7;&#xFE0F;</div>
+                <h3>【素材测试】更高效的标签管理</h3>
+                <p>上线自定义标签配置能力，涵盖了新建、编辑、拖拽排序，不再依赖开发，自己就能搞定！</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">自定义配置</span>
+                    <span class="feature-tag">拖拽排序</span>
+                    <span class="feature-tag">即时生效</span>
+                </div>
+                <div class="video-section" onclick="playVideo('video1')">
+                    <img src="images/video1_thumb.jpg" alt="素材标签测试演示" />
+                    <div class="video-overlay">
+                        <div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+                        <span>点击播放演示视频</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 02 素材展示 -->
+            <div class="feature-card reveal">
+                <span class="feature-number">02</span>
+                <div class="feature-icon">&#x1F3AC;</div>
+                <h3>【情绪测试】更优的素材体验</h3>
+                <p>支持全屏查看素材细节，新增视频素材展示能力，在线标记无死角！</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">全屏查看</span>
+                    <span class="feature-tag">视频支持</span>
+                    <span class="feature-tag">在线标记</span>
+                </div>
+                <div class="video-section" onclick="playVideo('video2')">
+                    <img src="images/video2_thumb.jpg" alt="情绪测试演示" />
+                    <div class="video-overlay">
+                        <div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+                        <span>点击播放演示视频</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 03 测评流程 -->
+            <div class="feature-card reveal">
+                <span class="feature-number">03</span>
+                <div class="feature-icon">&#x1F4CB;</div>
+                <h3>【评价测试】更灵活的测评流程</h3>
+                <p>独立内嵌 MUR 问卷，自主开关默认题项，定制独家测试环节！</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">MUR问卷</span>
+                    <span class="feature-tag">题项开关</span>
+                    <span class="feature-tag">灵活定制</span>
+                </div>
+                <div class="video-section" onclick="playVideo('video3')">
+                    <img src="images/video3_thumb.jpg" alt="评价测试演示" />
+                    <div class="video-overlay">
+                        <div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+                        <span>点击播放演示视频</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 使用指南 -->
+<section class="section" id="guide">
+    <div class="container">
+        <div class="section-header reveal">
+            <div class="section-label">User Guide</div>
+            <h2 class="section-title">「素材测试」使用指南</h2>
+            <p class="section-desc">从配置到统计，完整操作流程指引</p>
+        </div>
+
+        <!-- 指南内导航 Tab -->
+        <div class="guide-tabs reveal">
+            <button class="guide-tab-btn active" onclick="switchGuideTab('overview')">&#x1F680; 流程概览</button>
+            <button class="guide-tab-btn" onclick="switchGuideTab('detail')">&#x1F4CB; 操作步骤</button>
+            <button class="guide-tab-btn" onclick="switchGuideTab('compare')">&#x1F4CC; 功能对比速查</button>
+        </div>
+
+        <div class="guide-section reveal">
+
+            <!-- ========== 第一部分：总体流程概览 ========== -->
+            <div class="guide-part" id="guide-overview">
+                <h3 class="guide-part-title">&#x1F680; 流程概览</h3>
+                <p class="guide-part-desc">素材测试分为三个阶段，适用于情绪测试和评价测试两种模式</p>
+                <div class="flow-overview">
+                    <div class="flow-step">
+                        <div class="flow-step-num">1</div>
+                        <div class="flow-step-label">Step 1 &mdash; 测试前</div>
+                        <div class="flow-step-text">用研需预定体验室直播，并将对应的素材上传至直播链接中</div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="flow-step-num">2</div>
+                        <div class="flow-step-label">Step 2 &mdash; 测试中</div>
+                        <div class="flow-step-text">用研下发对应素材，主持人切换至屏幕投屏，观看者在线上查看玩家选择与素材统计结果</div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="flow-step-num">3</div>
+                        <div class="flow-step-label">Step 3 &mdash; 测试后</div>
+                        <div class="flow-step-text">直播结束后，用研可查看素材统计结果并导出</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== 第二部分：情绪测试 & 评价测试（Tab切换） ========== -->
+            <div class="guide-part" id="guide-detail">
+                <h3 class="guide-part-title">&#x1F4CB; 操作步骤</h3>
+                <p class="guide-part-desc">根据测试类型选择下方标签，查看详细操作步骤</p>
+
+                <!-- 切换 Tab -->
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('emotion')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"/></svg>情绪测试</button>
+                    <button class="tab-btn" onclick="switchTab('evaluation')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16.862 4.487l1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"/></svg>评价测试</button>
+                </div>
+
+                <!-- ========== 情绪测试内容 ========== -->
+                <div class="tab-content active" id="emotion">
+
+                    <div class="emotion-steps-wrapper">
+
+                        <!-- 左侧纵向导航 -->
+                        <nav class="side-nav">
+                            <div class="side-nav-title">操作步骤</div>
+                            <div class="side-nav-item active" onclick="scrollToStep(this, 'step-1')">
+                                <span class="nav-num">1</span><span>上传素材文件</span>
+                            </div>
+                            <div class="side-nav-item" onclick="scrollToStep(this, 'step-2')">
+                                <span class="nav-num">2</span><span>设置标签</span>
+                            </div>
+                            <div class="side-nav-item" onclick="scrollToStep(this, 'step-3')">
+                                <span class="nav-num">3</span><span>提交配置</span>
+                            </div>
+                            <div class="side-nav-item" onclick="scrollToStep(this, 'step-4')">
+                                <span class="nav-num">4</span><span>管理端下发素材</span>
+                            </div>
+                            <div class="side-nav-item" onclick="scrollToStep(this, 'step-5')">
+                                <span class="nav-num">5</span><span>玩家端触发测试</span>
+                            </div>
+                            <div class="side-nav-item" onclick="scrollToStep(this, 'step-6')">
+                                <span class="nav-num">6</span><span>观看端在线查看</span>
+                            </div>
+                            <div class="side-nav-item" onclick="scrollToStep(this, 'step-7')">
+                                <span class="nav-num">7</span><span>数据统计导出</span>
+                            </div>
+                        </nav>
+
+                        <!-- 右侧步骤内容 -->
+                        <div class="emotion-steps-content">
+
+                            <!-- 阶段一：测试前-配置阶段 -->
+                            <div class="phase-title">&#x1F4E6; 测试前：配置阶段</div>
+
+                            <!-- 步骤 1 -->
+                            <div class="step-block" id="step-1">
+                                <div class="step-header">
+                                    <div class="step-num">1</div>
+                                    <div class="step-name">上传素材文件</div>
+                                </div>
+                                <div class="step-body">
+                                    在「素材管理」区域，点击「<strong>上传文件</strong>」按钮，支持图片 / 视频素材，点击「确认」保存
+                                </div>
+                                <div class="screenshots">
+                                    <div class="screenshot"><img src="images/img_step1_01.png" alt="素材管理页面"></div>
+                                    <div class="screenshot"><img src="images/img_step1_02.png" alt="上传文件弹窗"></div>
+                                </div>
+                                <div class="step-note">
+                                    <strong>&#x1F4A1; 规则说明：</strong>每个文件夹视为一组素材，直播下发时以文件夹为单位进行分组下发
+                                </div>
+                            </div>
+
+                            <!-- 步骤 2 -->
+                            <div class="step-block" id="step-2">
+                                <div class="step-header">
+                                    <div class="step-num">2</div>
+                                    <div class="step-name">设置标签</div>
+                                </div>
+                                <div class="step-body">
+                                    在「标签管理」区域，配置玩家打标时可选择的标签，支持<strong>新增、删除、编辑，拖拽排序</strong>
+                                </div>
+                                <div class="screenshots">
+                                    <div class="screenshot screenshot-single"><img src="images/img_step2_tag.png" alt="标签管理"></div>
+                                </div>
+                                <div class="step-tip">
+                                    &#x2728; <strong>新功能：</strong>自定义标签配置，自己就能搞定！
+                                </div>
+                            </div>
+
+                            <!-- 步骤 3 -->
+                            <div class="step-block" id="step-3">
+                                <div class="step-header">
+                                    <div class="step-num">3</div>
+                                    <div class="step-name">提交配置</div>
+                                </div>
+                                <div class="step-body">
+                                    完成素材上传和标签设置后，点击页面底部「<strong>提交</strong>」按钮，完成情绪测试的预设配置
+                                </div>
+                                <div class="screenshots">
+                                    <div class="screenshot screenshot-single"><img src="images/img_step3_submit.png" alt="提交配置"></div>
+                                </div>
+                                <div class="step-note">
+                                    <strong>&#x26A0;&#xFE0F; 注意：</strong>若预定多天座谈会，需确认本次素材配置是否同步到其他场次
+                                </div>
+                            </div>
+
+                            <!-- 阶段二：测试中-素材下发 -->
+                            <div class="phase-title" style="margin-top:40px;">&#x1F3AF; 测试中：素材下发</div>
+
+                            <!-- 步骤 4 -->
+                            <div class="step-block" id="step-4">
+                                <div class="step-header">
+                                    <div class="step-num">4</div>
+                                    <div class="step-name">管理端 &mdash; 下发素材</div>
+                                </div>
+                                <div class="step-body">
+                                    用研再次进入管理端，找到「进行中」的直播，点击「<strong>素材测试</strong>」
+                                </div>
+                                <div class="screenshots">
+                                    <div class="screenshot screenshot-single"><img src="images/img_step4_live.png" alt="进入素材测试"></div>
+                                </div>
+                                <div class="step-body" style="margin-top:14px;">
+                                    此时页面展示已配置好的素材文件夹和标签，确认需要下发的素材文件夹，点击<strong>「下发素材」</strong>按钮，玩家客户端将同步弹出测试页面
+                                </div>
+                                <div class="screenshots">
+                                    <div class="screenshot screenshot-single"><img src="images/img_step4_deploy.png" alt="下发素材"></div>
+                                </div>
+                            </div>
+
+                            <!-- 步骤 5 -->
+                            <div class="step-block" id="step-5">
+                                <div class="step-header">
+                                    <div class="step-num">5</div>
+                                    <div class="step-name">玩家端 &mdash; 触发测试</div>
+                                </div>
+                                <div class="step-body">
+                                    玩家客户端打开素材测试页面后，测试流程如下：
+                                </div>
+                                <div class="sub-list">
+                                    <div class="sub-item"><strong>(1) 素材总览：</strong>展示本组所有素材的缩略图列表（素材文件名对玩家隐藏）</div>
+                                </div>
+                                <div class="screenshots">
+                                    <div class="screenshot screenshot-single"><img src="images/img_step5_overview.png" alt="素材总览"></div>
+                                </div>
+                                <div class="sub-list">
+                                    <div class="sub-item"><strong>(2) 单素材查看：</strong>点击进入单个素材后：</div>
+                                </div>
+                                <div class="step-body" style="padding-left:70px;">
+                                    &#x2022; 图片素材：支持点击放大查看细节<br>
+                                    &#x2022; 视频素材：支持全屏播放，并可在任意时间点进行打标
+                                </div>
+                                <div class="sub-list">
+                                    <div class="sub-item"><strong>(3) 打标评价操作：</strong></div>
+                                </div>
+                                <div class="step-body" style="padding-left:70px;">
+                                    &#x2022; 选择预设标签（每次提交一个，每个素材支持打多个标签）<br>
+                                    &#x2022; 填写文字评论（可选）<br>
+                                    &#x2022; 点击<strong>「发布评论」</strong>提交反馈
+                                </div>
+                                <div class="screenshots">
+                                    <div class="screenshot"><img src="images/img_step5_video.png" alt="视频打标"></div>
+                                    <div class="screenshot"><img src="images/img_step5_comment.png" alt="打标评价"></div>
+                                </div>
+                            </div>
+
+                            <!-- 步骤 6 -->
+                            <div class="step-block" id="step-6">
+                                <div class="step-header">
+                                    <div class="step-num">6</div>
+                                    <div class="step-name">观看端 &mdash; 在线查看</div>
+                                </div>
+                                <div class="step-body">
+                                    在线观看端可在直播页面的「<strong>素材测试</strong>」Tab 中实时查看标签统计情况：
+                                </div>
+                                <div class="sub-list">
+                                    <div class="sub-item"><strong>(1) 素材列表页：</strong>展示所有素材的实时打标概览（可见素材文件名）</div>
+                                </div>
+                                <div class="screenshots">
+                                    <div class="screenshot screenshot-single"><img src="images/img_step6_list.png" alt="素材列表页"></div>
+                                </div>
+                                <div class="sub-list">
+                                    <div class="sub-item"><strong>(2) 素材详情页：</strong>点击进入单个素材，查看详细标记情况，视频素材支持按时间轴查看各时间点的标记分布</div>
+                                </div>
+                                <div class="screenshots">
+                                    <div class="screenshot screenshot-single"><img src="images/img_step6_detail.png" alt="素材详情页"></div>
+                                </div>
+                                <div class="sub-list">
+                                    <div class="sub-item"><strong>(3) 筛选功能：</strong>支持按「标签」筛选和按「玩家」筛选</div>
+                                </div>
+                                <div class="screenshots">
+                                    <div class="screenshot screenshot-single"><img src="images/img_step6_filter.png" alt="筛选功能"></div>
+                                </div>
+                            </div>
+
+                            <!-- 阶段三：测试后-统计导出 -->
+                            <div class="phase-title" style="margin-top:40px;">&#x1F4CA; 测试后：统计导出</div>
+
+                            <!-- 步骤 7 -->
+                            <div class="step-block" id="step-7">
+                                <div class="step-header">
+                                    <div class="step-num">7</div>
+                                    <div class="step-name">数据统计</div>
+                                </div>
+                                <div class="step-body">
+                                    进入已生成录制文件的座谈会详情页，切换到「<strong>素材统计</strong>」Tab，查看或导出玩家的标签统计结果
+                                </div>
+                                <div class="screenshots">
+                                    <div class="screenshot screenshot-single"><img src="images/img_step7_stats.png" alt="数据统计"></div>
+                                </div>
+                            </div>
+
+                        </div><!-- end emotion-steps-content -->
+                    </div><!-- end emotion-steps-wrapper -->
+
+                </div><!-- end tab-content: emotion -->
+
+                <!-- ========== 评价测试内容 ========== -->
+                <div class="tab-content" id="evaluation">
+
+                    <div class="emotion-steps-wrapper">
+
+                        <!-- 左侧纵向导航 -->
+                        <nav class="side-nav">
+                            <div class="side-nav-title">操作步骤</div>
+                            <div class="side-nav-item active" onclick="scrollToStep(this, 'eval-step-1')">
+                                <span class="nav-num">1</span><span>上传素材与问卷配置</span>
+                            </div>
+                            <div class="side-nav-item" onclick="scrollToStep(this, 'eval-step-2')">
+                                <span class="nav-num">2</span><span>保存文件与创建分类</span>
+                            </div>
+                            <div class="side-nav-item" onclick="scrollToStep(this, 'eval-step-3')">
+                                <span class="nav-num">3</span><span>提交配置</span>
+                            </div>
+                            <div class="side-nav-item" onclick="scrollToStep(this, 'eval-step-4')">
+                                <span class="nav-num">4</span><span>管理端下发素材</span>
+                            </div>
+                            <div class="side-nav-item" onclick="scrollToStep(this, 'eval-step-5')">
+                                <span class="nav-num">5</span><span>玩家端触发测试</span>
+                            </div>
+                            <div class="side-nav-item" onclick="scrollToStep(this, 'eval-step-6')">
+                                <span class="nav-num">6</span><span>观看端在线查看</span>
+                            </div>
+                            <div class="side-nav-item" onclick="scrollToStep(this, 'eval-step-7')">
+                                <span class="nav-num">7</span><span>数据统计导出</span>
+                            </div>
+                        </nav>
+
+                        <!-- 右侧步骤内容 -->
+                        <div class="emotion-steps-content">
+
+                            <!-- 阶段一：测试前-配置阶段 -->
+                            <div class="phase-title">&#x1F4E6; 测试前：配置阶段</div>
+
+                            <!-- 步骤 1：上传素材与问卷配置 -->
+                            <div class="step-block" id="eval-step-1">
+                                <div class="step-header">
+                                    <div class="step-num">1</div>
+                                    <div class="step-name">上传素材与问卷配置</div>
+                                </div>
+                                <div class="step-body">
+                                    评价测试支持更灵活的配置方式：在<strong>「素材管理」</strong>区域，点击<strong>「上传文件」</strong>按钮，根据系统提示上传对应类型的图片/视频素材
+                                </div>
+                                <!-- 配置项表格 -->
+                                <table class="comparison-table" style="margin-top:14px;">
+                                    <thead><tr>
+                                        <th>配置项</th><th>说明</th><th>可选性</th>
+                                    </tr></thead>
+                                    <tbody>
+                                        <tr><td>上传素材</td><td>上传图片或视频文件</td><td rowspan="2">至少配置一项</td></tr>
+                                        <tr><td>问卷</td><td>填写 MUR 问卷链接</td></tr>
+                                        <tr><td>默认题项</td><td>定制体验终端上的内置测试题目</td><td>可选（需联系产品团队）</td></tr>
+                                    </tbody>
+                                </table>
+                                <div class="screenshots">
+                                    <div class="screenshot"><img src="images/eval_upload_ui.png" alt="素材管理上传界面"></div>
+                                    <div class="screenshot"><img src="images/eval_mur_guide.png" alt="MUR问卷配置指引"></div>
+                                </div>
+                                <div class="step-body" style="margin-top:14px;padding-left:0;">
+                                    如需配置 MUR 问卷，参考系统提示在问卷系统进行设置，复制问卷链接回填到素材测试
+                                </div>
+                                <div class="screenshots">
+                                    <div class="screenshot screenshot-single"><img src="images/eval_mur_link.png" alt="填写MUR问卷链接"></div>
+                                </div>
+                                <div class="step-note">
+                                    如需在玩家端展示系统默认的评价题项，请提前联系 <strong>luceyyang</strong> 咨询具体方案
+                                </div>
+                                <div class="step-body" style="margin-top:14px;padding-left:0;">
+                                    <strong>默认题项示例：</strong>
+                                </div>
+                                <div class="screenshots" style="grid-template-columns: repeat(3, 1fr);">
+                                    <div class="screenshot"><img src="images/eval_score_example.png" alt="评分题示例"></div>
+                                    <div class="screenshot"><img src="images/eval_emoji_example.png" alt="表情评价示例"></div>
+                                    <div class="screenshot"><img src="images/eval_tag_example.png" alt="情绪标签示例"></div>
+                                </div>
+                            </div>
+
+                            <!-- 步骤 2：保存文件与创建分类 -->
+                            <div class="step-block" id="eval-step-2">
+                                <div class="step-header">
+                                    <div class="step-num">2</div>
+                                    <div class="step-name">保存文件与创建分类（可选）</div>
+                                </div>
+                                <div class="step-body">
+                                    根据上传内容的不同组合，系统会自动识别文件夹类型：
+                                </div>
+                                <!-- 文件夹类型表格 -->
+                                <table class="comparison-table" style="margin-top:14px;">
+                                    <thead><tr>
+                                        <th>文件夹类型</th><th>内容组合</th><th>玩家端展示</th>
+                                    </tr></thead>
+                                    <tbody>
+                                        <tr><td>仅素材</td><td>仅上传图片/视频</td><td>仅展示素材</td></tr>
+                                        <tr><td>仅问卷</td><td>仅填写 MUR 链接</td><td>仅展示问卷页面</td></tr>
+                                        <tr><td>素材 + 问卷</td><td>同时上传素材和填写链接</td><td>先展示素材，后展示问卷</td></tr>
+                                    </tbody>
+                                </table>
+                                <div class="step-body" style="margin-top:14px;padding-left:0;">
+                                    如需一次下发多个文件夹，可点击<strong>「新建分类」</strong>按钮，将需要批量下发的文件夹移动至分类中。分类内的文件夹为<strong>「随机顺序」</strong>下发，暂不支持顺序排序
+                                </div>
+                                <div class="step-tip">
+                                    玩家需要连续完成本次下发中的所有测试任务，再等待其他下发任务
+                                </div>
+                                <div class="screenshots">
+                                    <div class="screenshot screenshot-single"><img src="images/eval_category_ui.png" alt="新建分类界面"></div>
+                                </div>
+                                <div class="step-note">
+                                    <strong>&#x1F4A1; 注意：</strong>标签管理仅影响开启了默认题项的测试流程
+                                </div>
+                            </div>
+
+                            <!-- 步骤 3：提交配置 -->
+                            <div class="step-block" id="eval-step-3">
+                                <div class="step-header">
+                                    <div class="step-num">3</div>
+                                    <div class="step-name">提交配置</div>
+                                </div>
+                                <div class="step-body">
+                                    完成所有配置后，点击页面底部<strong>「提交」</strong>按钮，完成评价测试的预设配置
+                                </div>
+                                <div class="screenshots">
+                                    <div class="screenshot screenshot-single"><img src="images/eval_submit_confirm.png" alt="提交确认弹窗"></div>
+                                </div>
+                                <div class="step-note">
+                                    <strong>&#x26A0;&#xFE0F; 注意：</strong>若预定多天座谈会，需确认本次素材配置是否同步到其他场次
+                                </div>
+                            </div>
+
+                            <!-- 阶段二：测试中-素材下发 -->
+                            <div class="phase-title" style="margin-top:40px;">&#x1F3AF; 测试中：素材下发</div>
+
+                            <!-- 步骤 4 -->
+                            <div class="step-block" id="eval-step-4">
+                                <div class="step-header">
+                                    <div class="step-num">4</div>
+                                    <div class="step-name">管理端 &mdash; 下发素材</div>
+                                </div>
+                                <div class="step-body">
+                                    用研再次进入管理端，找到「进行中」的直播，点击<strong>「素材测试」</strong>
+                                </div>
+                                <div class="screenshots">
+                                    <div class="screenshot screenshot-single"><img src="images/eval_live_list.png" alt="直播列表进入素材测试"></div>
+                                </div>
+                                <div class="step-body" style="margin-top:14px;padding-left:0;">
+                                    此时页面展示已配置好的素材文件夹和标签，确认需要下发的素材文件夹，点击<strong>「下发素材」</strong>按钮，玩家客户端将同步弹出测试页面
+                                </div>
+                                <div class="screenshots">
+                                    <div class="screenshot screenshot-single"><img src="images/eval_deploy_ui.png" alt="下发素材界面"></div>
+                                </div>
+                            </div>
+
+                            <!-- 步骤 5 -->
+                            <div class="step-block" id="eval-step-5">
+                                <div class="step-header">
+                                    <div class="step-num">5</div>
+                                    <div class="step-name">玩家端 &mdash; 触发测试</div>
+                                </div>
+                                <div class="step-body">
+                                    玩家客户端打开素材测试页面，根据上传素材类型展示对应内容，测试流程如下：
+                                </div>
+                                <div class="sub-list">
+                                    <div class="sub-item"><strong>(1) 素材：</strong>若上传了对应素材类型，玩家将依次观看文件夹中所有素材</div>
+                                </div>
+                                <div class="step-body" style="padding-left:70px;">
+                                    &#x2022; 若没有开启系统默认题项，素材环节观看结束后点击<strong>「继续查看后续素材」</strong>按钮，玩家继续浏览后续素材<br>
+                                    &#x2022; 若开启了系统默认题项，素材环节观看结束后点击<strong>「进入评价」</strong>按钮，玩家将进入预设的答题页面
+                                </div>
+                                <div class="screenshots" style="grid-template-columns: repeat(3, 1fr);">
+                                    <div class="screenshot"><img src="images/eval_player_image.png" alt="玩家端图片素材"></div>
+                                    <div class="screenshot"><img src="images/eval_player_image2.png" alt="继续查看后续素材"></div>
+                                    <div class="screenshot"><img src="images/eval_player_video.png" alt="玩家端视频素材"></div>
+                                </div>
+                                <div class="sub-list" style="margin-top:14px;">
+                                    <div class="sub-item"><strong>(2) 系统默认题项（如选择开启）：部分题目类型示例如下</strong></div>
+                                </div>
+                                <div class="screenshots" style="grid-template-columns: repeat(3, 1fr); margin-top:10px;">
+                                    <div class="screenshot"><img src="images/eval_score_example2.png" alt="评分题"></div>
+                                    <div class="screenshot"><img src="images/eval_emoji_example2.png" alt="表情评价"></div>
+                                    <div class="screenshot"><img src="images/eval_tag_example2.png" alt="情绪标签"></div>
+                                </div>
+                                <div class="sub-list" style="margin-top:14px;">
+                                    <div class="sub-item"><strong>(3) 问卷：</strong>若配置了 MUR 问卷，玩家将直接在客户端打开问卷页面进行填答</div>
+                                </div>
+                                <div class="screenshots">
+                                    <div class="screenshot screenshot-single"><img src="images/eval_mur_survey.png" alt="玩家端问卷页面"></div>
+                                </div>
+                            </div>
+
+                            <!-- 步骤 6 -->
+                            <div class="step-block" id="eval-step-6">
+                                <div class="step-header">
+                                    <div class="step-num">6</div>
+                                    <div class="step-name">观看端 &mdash; 在线查看</div>
+                                </div>
+                                <div class="step-body">
+                                    在线观看端可在直播页面的<strong>「素材测试」</strong> Tab 中实时查看标签统计情况：
+                                </div>
+                                <div class="sub-list">
+                                    <div class="sub-item"><strong>(1) 问卷数据：</strong>若开启了系统默认题项，实时在线统计素材评分、标签、主观文本评价等数据</div>
+                                </div>
+                                <div class="screenshots">
+                                    <div class="screenshot screenshot-single"><img src="images/eval_stats_survey.png" alt="统计-问卷数据"></div>
+                                </div>
+                                <div class="sub-list">
+                                    <div class="sub-item"><strong>(2) 系统默认题项统计：</strong>若开启了系统默认题项，实时在线统计素材评分、标签、主观文本评价等数据</div>
+                                </div>
+                                <div class="screenshots">
+                                    <div class="screenshot"><img src="images/eval_stats_default1.png" alt="默认题项统计1"></div>
+                                    <div class="screenshot"><img src="images/eval_stats_default2.png" alt="默认题项统计2"></div>
+                                </div>
+                            </div>
+
+                            <!-- 阶段三：测试后-统计导出 -->
+                            <div class="phase-title" style="margin-top:40px;">&#x1F4CA; 测试后：统计导出</div>
+
+                            <!-- 步骤 7 -->
+                            <div class="step-block" id="eval-step-7">
+                                <div class="step-header">
+                                    <div class="step-num">7</div>
+                                    <div class="step-name">数据统计</div>
+                                </div>
+                                <div class="sub-list">
+                                    <div class="sub-item"><strong>(1) 问卷：</strong>问卷数据直接在 MUR 问卷系统进行查看统计</div>
+                                    <div class="sub-item"><strong>(2) 系统默认题项：</strong>若开启了系统默认题项，统计数据联系产研团队后台导出</div>
+                                </div>
+
+                            </div>
+
+                        </div><!-- end emotion-steps-content -->
+                    </div><!-- end emotion-steps-wrapper -->
+
+                </div><!-- end tab-content: evaluation -->
+
+            </div><!-- end guide-part: 具体流程 -->
+
+            <!-- ========== 第三部分：功能对比速查 ========== -->
+            <div class="guide-part" id="guide-compare">
+                <h3 class="guide-part-title">&#x1F4CC; 功能对比速查</h3>
+                <p class="guide-part-desc">快速了解情绪测试与评价测试的核心差异</p>
+                <table class="comparison-table">
+                    <thead><tr>
+                        <th>功能维度</th><th>情绪测试</th><th>评价测试</th>
+                    </tr></thead>
+                    <tbody>
+                        <tr><td>核心目标</td><td>即时情绪反应收集</td><td>深度多维评价收集</td></tr>
+                        <tr><td>素材类型</td><td><span class="check-icon">&#x2713;</span> 图片、视频</td><td><span class="check-icon">&#x2713;</span> 图片、视频</td></tr>
+                        <tr><td>标签打标</td><td><span class="check-icon">&#x2713;</span> 支持</td><td>需联系产品定制</td></tr>
+                        <tr><td>视频时间点标记</td><td><span class="check-icon">&#x2713;</span> 支持</td><td><span class="cross-icon">&#x2717;</span> 不支持</td></tr>
+                        <tr><td>MUR问卷下发</td><td><span class="cross-icon">&#x2717;</span> 不支持</td><td><span class="check-icon">&#x2713;</span> 支持</td></tr>
+                        <tr><td>文件夹分组</td><td><span class="cross-icon">&#x2717;</span> 不支持</td><td><span class="check-icon">&#x2713;</span> 支持</td></tr>
+                        <tr><td>实时统计</td><td><span class="check-icon">&#x2713;</span> 支持</td><td><span class="check-icon">&#x2713;</span> 支持</td></tr>
+                    </tbody>
+                </table>
+            </div><!-- end guide-part: 功能对比 -->
+
+        </div><!-- end guide-section -->
+    </div>
+</section>
+
+<!-- 联系我们 -->
+<section class="section" id="contact">
+    <div class="container">
+        <div class="doc-notice reveal" style="background: var(--primary-bg); border: 1px solid var(--primary-light, rgba(79,70,229,0.2)); border-radius: 12px; padding: 18px 24px; text-align: center; margin-bottom: 40px;">
+            <span style="color: var(--text-secondary); font-size: 14px;">&#x1F4D6; 操作指南以企微文档为准，</span>
+            <a href="https://doc.weixin.qq.com/doc/w3_AWgATAacAB4CNgSUeQERYSCK1DiQi?scode=AJEAIQdfAAoMlTZlllAWgATAacAB4" target="_blank" style="color: var(--primary); font-weight: 600; text-decoration: none;">点击查看完整文档 &#x2197;</a>
+        </div>
+        <div class="contact-section reveal">
+            <h3>联系我们</h3>
+            <p>如有任何问题或建议，欢迎随时联系我们</p>
+            <div class="contact-cards">
+                <div class="contact-card">
+                    <span class="contact-card-label">产品咨询</span>
+                    <span class="contact-card-value">luceyyang</span>
+                </div>
+                <div class="contact-card">
+                    <span class="contact-card-label">技术支持</span>
+                    <span class="contact-card-value">zesonliu</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="container">&copy; 2026 体验室系统 &middot; 素材测试功能上新</div>
+</footer>
+
+<!-- 视频弹窗 -->
+<div class="video-modal" id="videoModal">
+    <button class="video-modal-close" onclick="closeVideo()">&times;</button>
+    <video id="modalVideo" controls>
+        <source id="videoSource" src="" type="video/mp4">
+    </video>
+</div>
+
+<!-- 图片预览弹窗 -->
+<div class="img-modal" id="imgModal">
+    <button class="img-modal-close" onclick="closeImg()">&times;</button>
+    <img id="imgModalImg" src="" alt="图片预览">
+</div>
+
+<script>
+/* ===== 滚动时导航栏效果 ===== */
+window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+/* ===== 粒子装饰（轻量） ===== */
+(function(){
+    const c = document.createElement('canvas');
+    c.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;';
+    document.body.prepend(c);
+    const ctx = c.getContext('2d');
+    let pts = [];
+    function resize(){ c.width = window.innerWidth; c.height = window.innerHeight; }
+    resize(); window.addEventListener('resize', resize);
+
+    for(let i = 0; i < 30; i++) {
+        pts.push({
+            x: Math.random() * c.width,
+            y: Math.random() * c.height,
+            r: Math.random() * 2 + 1,
+            vx: (Math.random() - 0.5) * 0.3,
+            vy: (Math.random() - 0.5) * 0.3,
+            alpha: Math.random() * 0.15 + 0.05
+        });
+    }
+    function animate() {
+        ctx.clearRect(0,0,c.width,c.height);
+        pts.forEach(p => {
+            p.x += p.vx; p.y += p.vy;
+            if(p.x < 0 || p.x > c.width) p.vx *= -1;
+            if(p.y < 0 || p.y > c.height) p.vy *= -1;
+            ctx.beginPath();
+            ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+            ctx.fillStyle = `rgba(79,70,229,${p.alpha})`;
+            ctx.fill();
+        });
+        requestAnimationFrame(animate);
+    }
+    animate();
+})();
+
+/* ===== 滚动显示动画 ===== */
+function revealOnScroll() {
+    document.querySelectorAll('.reveal').forEach(el => {
+        if (el.getBoundingClientRect().top < window.innerHeight - 120)
+            el.classList.add('visible');
+    });
+}
+window.addEventListener('scroll', revealOnScroll, {passive:true});
+revealOnScroll();
+
+/* ===== Tab 切换 ===== */
+function switchTab(id) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.querySelector(`.tab-btn[onclick*="${id}"]`).classList.add('active');
+    document.getElementById(id).classList.add('active');
+}
+
+/* ===== 指南内导航 Tab 切换 ===== */
+function switchGuideTab(id) {
+    document.querySelectorAll('.guide-tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.guide-part').forEach(p => p.style.display = 'none');
+    document.querySelector(`.guide-tab-btn[onclick*="${id}"]`).classList.add('active');
+    const target = document.getElementById('guide-' + id);
+    if (target) target.style.display = 'block';
+}
+
+/* ===== 平滑滚动 ===== */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => { e.preventDefault();
+        document.querySelector(a.getAttribute('href')).scrollIntoView({behavior:'smooth'}); });
+});
+
+/* ===== 视频弹窗 ===== */
+const videoPaths = {
+    'video1': 'video1_material_tag.mp4',
+    'video2': '录屏2026-05-12 17.25.21.mp4',
+    'video3': '录屏2026-05-13 15.52.33.mp4'
+};
+function playVideo(id) {
+    const m = document.getElementById('videoModal');
+    const v = document.getElementById('modalVideo');
+    document.getElementById('videoSource').src = videoPaths[id];
+    v.load(); m.classList.add('active');
+}
+function closeVideo() {
+    document.getElementById('videoModal').classList.remove('active');
+    document.getElementById('modalVideo').pause();
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeVideo(); });
+
+// 点击遮罩关闭
+document.getElementById('videoModal').addEventListener('click', e => {
+    if(e.target.id === 'videoModal') closeVideo();
+});
+
+/* ===== 图片预览 ===== */
+function openImg(src) {
+    document.getElementById('imgModalImg').src = src;
+    document.getElementById('imgModal').classList.add('active');
+}
+function closeImg() {
+    document.getElementById('imgModal').classList.remove('active');
+}
+document.getElementById('imgModal').addEventListener('click', e => {
+    if(e.target.id === 'imgModal') closeImg();
+});
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeImg(); });
+
+// 自动给所有截图绑定点击事件
+document.querySelectorAll('.screenshot img').forEach(img => {
+    img.addEventListener('click', () => openImg(img.src));
+});
+
+/* ===== 左侧导航点击滚动 ===== */
+function scrollToStep(el, stepId) {
+    // 更新激活状态
+    document.querySelectorAll('.side-nav-item').forEach(item => item.classList.remove('active'));
+    el.classList.add('active');
+    // 滚动到对应步骤
+    const target = document.getElementById(stepId);
+    if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+// 滚动时自动高亮当前步骤
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const id = entry.target.id;
+            document.querySelectorAll('.side-nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('onclick')?.includes(id)) {
+                    item.classList.add('active');
+                }
+            });
+        }
+    });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+document.querySelectorAll('.step-block[id]').forEach(el => observer.observe(el));
+
+// 切换Tab时重置侧边导航状态
+const origSwitchTab = switchTab;
+switchTab = function(id) {
+    origSwitchTab(id);
+    // 重置目标tab内的所有side-nav-item为非active，第一个设为active
+    const targetContent = document.getElementById(id);
+    if (targetContent) {
+        targetContent.querySelectorAll('.side-nav-item').forEach((item, idx) => {
+            item.classList.remove('active');
+            if (idx === 0) item.classList.add('active');
+        });
+    }
+};
+</script>
+</body>
+</html>
